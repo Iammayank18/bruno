@@ -16,6 +16,7 @@ const REQUEST_TAB_TYPES = new Set(['http-request', 'graphql-request', 'grpc-requ
 const SINGLETON_TAB_TYPES = new Set([
   'variables',
   'collection-runner',
+  'collection-schedules',
   'collection-settings',
   'collection-overview',
   'environment-settings',
@@ -30,6 +31,7 @@ const SINGLETON_TAB_TYPES = new Set([
 
 const NON_REPLACEABLE_SINGLETON_TAB_TYPES = new Set([
   'collection-runner',
+  'collection-schedules',
   'variables',
   'openapi-sync',
   'openapi-spec',
@@ -760,6 +762,8 @@ export const deserializeTab = (snapshotTab, collection) => {
       tab.uid = `${collection.uid}-preferences`;
     } else if (type === 'environment-settings') {
       tab.uid = `${collection.uid}-environment-settings`;
+    } else if (type === 'collection-schedules') {
+      tab.uid = `${collection.uid}-collection-schedules`;
     } else if (type === 'global-environment-settings') {
       tab.uid = `${collection.uid}-global-environment-settings`;
     } else if (NON_REPLACEABLE_SINGLETON_TAB_TYPES.has(type)) {

@@ -56,7 +56,9 @@ const registerAiIpc = require('./ipc/ai');
 const registerAiAutocompleteIpc = require('./ipc/ai/autocomplete');
 const { registerMountIpc } = require('./ipc/mount');
 const { registerSqliteIpc } = require('./ipc/sqlite');
+const { registerSchedulesIpc } = require('./ipc/schedules');
 const sqliteService = require('./services/sqlite');
+const { schedulerService } = require('./services/scheduler');
 const { clearAllRunnerResponses } = require('./services/runner-exchange');
 const { registerWsdlIpc } = require('./ipc/wsdl');
 const collectionWatcher = require('./app/collection-watcher');
@@ -547,6 +549,8 @@ app.on('ready', async () => {
   sqliteService.openDatabase();
   clearAllRunnerResponses().catch((err) => console.warn('[runner] failed to clear stored responses', err));
   registerSqliteIpc();
+  registerSchedulesIpc();
+  schedulerService.start(mainWindow);
   appDocuments.handleProtocol();
   registerAppDocumentIpc(appDocuments, mainWindow);
   registerWsdlIpc();
@@ -585,6 +589,8 @@ app.on('before-quit', (event) => {
     } catch {}
 
     try { await require('./ipc/mount').shutdown({ force: true }); } catch { }
+
+    schedulerService.stop();
 
     try { await clearAllRunnerResponses(); } catch {}
 

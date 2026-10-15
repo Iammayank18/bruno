@@ -22,13 +22,15 @@ import {
   IconBook,
   IconServer,
   IconFileArrowRight,
-  IconAppWindow
+  IconAppWindow,
+  IconClock
 } from '@tabler/icons';
 import OpenAPISyncIcon from 'components/Icons/OpenAPISync';
 import { toggleCollection, collapseFullCollection, clearSidebarSelection } from 'providers/ReduxStore/slices/collections';
 import { mountCollection, moveCollectionAndPersist, handleMultipleCollectionItemsDrop, pasteItem, showInFolder, saveCollectionSecurityConfig } from 'providers/ReduxStore/slices/collections/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTab, makeTabPermanent } from 'providers/ReduxStore/slices/tabs';
+import { openSchedulesTab } from 'providers/ReduxStore/slices/schedules';
 import { setFocusedSidebarPath } from 'providers/ReduxStore/slices/app';
 import toast from 'react-hot-toast';
 import NewRequest from 'components/Sidebar/NewRequest';
@@ -416,6 +418,16 @@ const CollectionRow = ({ collection, searchText, openBulkMenu, children, isColle
       onClick: () => {
         ensureCollectionIsMounted();
         handleRun();
+      }
+    },
+    {
+      id: 'schedule-runs',
+      leftSection: IconClock,
+      label: 'Schedule Runs',
+      testId: 'schedule-runs-action',
+      onClick: () => {
+        ensureCollectionIsMounted();
+        dispatch(openSchedulesTab({ collectionUid: collection.uid }));
       }
     },
     {

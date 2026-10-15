@@ -19,10 +19,12 @@ import {
   IconInfoCircle,
   IconTerminal2,
   IconAppWindow,
-  IconEyeOff
+  IconEyeOff,
+  IconClock
 } from '@tabler/icons';
 import { useSelector, useDispatch, useStore } from 'react-redux';
 import { addTab, focusTab, makeTabPermanent } from 'providers/ReduxStore/slices/tabs';
+import { openSchedulesTab } from 'providers/ReduxStore/slices/schedules';
 import { handleMultipleCollectionItemsDrop, sendRequest, showInFolder, pasteItem, saveRequest, cloneItem } from 'providers/ReduxStore/slices/collections/actions';
 import { sanitizeName } from 'utils/common/regex';
 import { formatIpcError } from 'utils/common/error';
@@ -442,6 +444,13 @@ const CollectionItemRow = ({
           leftSection: IconPlayerPlay,
           label: 'Run',
           onClick: () => setRunCollectionModalOpen(true)
+        },
+        {
+          id: 'schedule-runs',
+          leftSection: IconClock,
+          label: 'Schedule Runs',
+          testId: 'schedule-runs-action',
+          onClick: () => dispatch(openSchedulesTab({ collectionUid, folderPathname: item.pathname }))
         }
       );
     }

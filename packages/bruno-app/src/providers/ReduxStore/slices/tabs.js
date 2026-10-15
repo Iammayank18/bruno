@@ -94,6 +94,7 @@ export const tabsSlice = createSlice({
       const nonReplaceableTabTypes = [
         'variables',
         'collection-runner',
+        'collection-schedules',
         'environment-settings',
         'global-environment-settings',
         'preferences',
@@ -285,7 +286,7 @@ export const tabsSlice = createSlice({
       }
     },
     updateTabMeta: (state, action) => {
-      const { uid, tabName, responseName } = action.payload;
+      const { uid, tabName, responseName, pathname } = action.payload;
       const tab = find(state.tabs, (t) => t.uid === uid);
 
       if (!tab) {
@@ -298,6 +299,10 @@ export const tabsSlice = createSlice({
 
       if (responseName !== undefined) {
         tab.responseName = responseName;
+      }
+
+      if (pathname !== undefined) {
+        tab.pathname = pathname;
       }
     },
     updateResponseFormat: (state, action) => {

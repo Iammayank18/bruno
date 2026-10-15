@@ -29,7 +29,9 @@ describe('registerSqliteIpc', () => {
       'datastore:file-index:file_index_size',
       'datastore:file-index:file_index_clear',
       'datastore:runner_responses:get_runner_response',
-      'datastore:runner_responses:delete_runner_responses_for_collection'
+      'datastore:runner_responses:delete_runner_responses_for_collection',
+      'datastore:scheduled_runs:list_scheduled_runs_for_schedule',
+      'datastore:scheduled_runs:list_scheduled_run_requests'
     ]);
   });
 
@@ -101,5 +103,38 @@ describe('registerSqliteIpc', () => {
         expect(clearRunnerResponses).not.toHaveBeenCalled();
       }
     );
+  });
+
+  describe('list_scheduled_runs_for_schedule', () => {
+    const channel = 'datastore:scheduled_runs:list_scheduled_runs_for_schedule';
+
+    it.each([
+      [{ schedule_id: 's1', limit: 20, extra: 'ignored' }, 20],
+      [{ schedule_id: 's1' }, 1000],
+      [{ schedule_id: 's1', limit: 0 }, 1000],
+      [{ schedule_id: 's1', limit: 5000 }, 1000]
+    ])('lists runs for %p with a limit of %p', (params, limit) => {
+      expect(invoke(channel, params)).toBe('result');
+      expect(statements.execute).toHaveBeenCalledWith('list_scheduled_runs_for_schedule', { schedule_id: 's1', limit });
+    });
+
+    it('rejects a missing schedule id without touching the database', () => {
+      expect(() => invoke(channel, { limit: 10 })).toThrow('schedule_id must be a non-empty string');
+      expect(statements.execute).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('list_scheduled_run_requests', () => {
+    const channel = 'datastore:scheduled_runs:list_scheduled_run_requests';
+
+    it('lists the request rows of a run', () => {
+      expect(invoke(channel, { run_id: 7, extra: 'ignored' })).toBe('result');
+      expect(statements.execute).toHaveBeenCalledWith('list_scheduled_run_requests', { run_id: 7 });
+    });
+
+    it.each([undefined, {}, { run_id: '7' }, { run_id: 1.5 }])('rejects %p without touching the database', (params) => {
+      expect(() => invoke(channel, params)).toThrow('run_id must be an integer');
+      expect(statements.execute).not.toHaveBeenCalled();
+    });
   });
 });

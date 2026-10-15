@@ -202,6 +202,7 @@ const RequestTab = ({ tab, collection, tabIndex, collectionRequestTabs, folderUi
     'folder-settings',
     'variables',
     'collection-runner',
+    'collection-schedules',
     'environment-settings',
     'global-environment-settings',
     'preferences',

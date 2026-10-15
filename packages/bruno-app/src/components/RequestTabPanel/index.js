@@ -47,6 +47,7 @@ import OpenAPISpecTab from 'components/OpenAPISpecTab';
 import ApiSpecTab from 'components/ApiSpecTab';
 import MockServerDashboard from 'components/MockServer/MockServerDashboard';
 import MockResponse from 'components/MockServer/MockResponse';
+import Schedules from 'components/Schedules';
 import ChangelogTab from 'components/ChangelogTab';
 import { resolveMockServerInstance } from 'utils/mock-server/mock-server-instances';
 import CollapsedPanelIndicator from './CollapsedPanelIndicator';
@@ -538,6 +539,10 @@ const RequestTabPanel = () => {
         <RunnerResults collection={collection} />
       </ScopedPersistenceProvider>
     );
+  }
+
+  if (focusedTab.type === 'collection-schedules') {
+    return <Schedules collection={collection} folderPathname={focusedTab.pathname} />;
   }
 
   if (focusedTab.type === 'variables') {

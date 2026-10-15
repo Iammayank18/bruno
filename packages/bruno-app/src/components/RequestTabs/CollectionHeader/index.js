@@ -5,6 +5,7 @@ import {
   IconBox,
   IconChevronDown,
   IconRun,
+  IconClock,
   IconEye,
   IconSettings,
   IconDots,
@@ -28,6 +29,7 @@ import { showInFolder } from 'providers/ReduxStore/slices/collections/actions';
 import { toggleCollectionFileMode } from 'providers/ReduxStore/slices/collections';
 import { toggleAiSidebar } from 'providers/ReduxStore/slices/chat';
 import { showMigrateToYmlModal } from 'providers/ReduxStore/slices/collection-migration';
+import { openSchedulesTab } from 'providers/ReduxStore/slices/schedules';
 import { findItemInCollection, findItemInCollectionByPathname } from 'utils/collections';
 import find from 'lodash/find';
 import get from 'lodash/get';
@@ -794,6 +796,11 @@ const CollectionHeader = ({ collection, isScratchCollection }) => {
               <ToolHint text="Runner" toolhintId="RunnerToolhintId" place="bottom">
                 <ActionIcon onClick={handleRun} aria-label="Runner" size="sm" data-testid="runner">
                   <IconRun size={16} strokeWidth={1.5} />
+                </ActionIcon>
+              </ToolHint>
+              <ToolHint text="Schedules" toolhintId="SchedulesToolhintId" place="bottom">
+                <ActionIcon onClick={() => dispatch(openSchedulesTab({ collectionUid: collection.uid }))} aria-label="Schedules" size="sm" data-testid="schedules">
+                  <IconClock size={16} strokeWidth={1.5} />
                 </ActionIcon>
               </ToolHint>
               {/* JS Sandbox Mode - always visible */}

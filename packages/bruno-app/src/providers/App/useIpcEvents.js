@@ -49,6 +49,7 @@ import { globalEnvironmentsUpdateEvent, updateGlobalEnvironments, _clearScriptGl
 import { collectionAddOauth2CredentialsByUrl, collectionClearOauth2CredentialsByCredentialsId, updateCollectionLoadingState, collectionLoadedFromTree } from 'providers/ReduxStore/slices/collections/index';
 import { migrationProgressEvent } from 'providers/ReduxStore/slices/collection-migration';
 import { addLog } from 'providers/ReduxStore/slices/logs';
+import { scheduleEventReceived } from 'providers/ReduxStore/slices/schedules';
 import { loadNotifications } from 'providers/ReduxStore/slices/notifications';
 import { updateSystemResources } from 'providers/ReduxStore/slices/performance';
 import { apiSpecAddFileEvent, apiSpecChangeFileEvent } from 'providers/ReduxStore/slices/apiSpec';
@@ -263,6 +264,10 @@ const useIpcEvents = () => {
       dispatch(runRequestEvent(val));
     });
 
+    const removeScheduleEventListener = ipcRenderer.on('main:schedule-event', (val) => {
+      dispatch(scheduleEventReceived(val));
+    });
+
     const removeProcessEnvUpdatesListener = ipcRenderer.on('main:process-env-update', (val) => {
       dispatch(processEnvUpdateEvent(val));
     });
@@ -445,6 +450,7 @@ const useIpcEvents = () => {
       removeCollectionRenamedListener();
       removeRunFolderEventListener();
       removeRunRequestEventListener();
+      removeScheduleEventListener();
       removeProcessEnvUpdatesListener();
       removeWorkspaceDotEnvUpdatesListener();
       removeDotEnvFileUpdateListener();

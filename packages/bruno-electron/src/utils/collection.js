@@ -819,11 +819,11 @@ const getAllRequestsInFolderRecursively = (folder = {}) => {
   return requests;
 };
 
-const getEnvVars = (environment = {}) => {
+const getEnvVars = (environment) => {
   const variables = [...(environment?.inheritedVariables || []), ...(environment?.variables || [])];
   if (!variables.length) {
     return {
-      __name__: environment.name
+      __name__: environment?.name
     };
   }
 
@@ -836,7 +836,7 @@ const getEnvVars = (environment = {}) => {
 
   return {
     ...envVars,
-    __name__: environment.name
+    __name__: environment?.name
   };
 };
 
